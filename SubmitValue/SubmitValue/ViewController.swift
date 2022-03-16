@@ -10,8 +10,6 @@ import UIKit
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     @IBOutlet var email: UITextField!
     
@@ -37,9 +35,28 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onSubmit(_ sender: Any) {
-        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "RVC") as? ResultViewController else{
+        guard let rvc = self.storyboard?.instantiateViewController(withIdentifier: "RVC") as? ResultViewController
+        else{
             return
+        
+    }
+    }
+    
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?){
+            let dest = segue.destination
+            
+            guard let rvc = dest as? ResultViewController else{
+                return
+        
         }
+    
+    rvc.paramEmail = self.email.text!
+    rvc.paramUpdate = self.isUpdate.isOn
+    rvc.paramInterval = self.interval.value
+    
+    self.navigationController?.pushViewController(rvc, animated: true)
+}
+    @IBAction func onPerformSegue(_ sender: Any) {
+        self.performSegue(withIdentifier: "ManualSubmit", sender: self)
     }
 }
-
